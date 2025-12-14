@@ -1,0 +1,60 @@
+---
+# Namespace for dev team
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev-team
+---
+# ServiceAccount for developer
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: dev-user
+  namespace: dev-team
+---
+# Role with limited permissions
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: dev-role
+  namespace: dev-team
+rules:
+  - apiGroups: ["", "apps", "batch"]
+    resources: ["pods", "deployments", "jobs", "services"]
+    verbs: ["get", "list", "create", "delete"]
+---
+# RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: dev-binding
+  namespace: dev-team
+subjects:
+  - kind: ServiceAccount
+    name: dev-user
+    namespace: dev-team
+roleRef:
+  kind: Role
+  name: dev-role
+  apiGroup: rbac.authorization.k8s.io
+---
+# Admin ServiceAccount
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: admin-user
+  namespace: kube-system
+---
+# ClusterRoleBinding for admin
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: admin-binding
+subjects:
+  - kind: ServiceAccount
+    name: admin-user
+    namespace: kube-system
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io

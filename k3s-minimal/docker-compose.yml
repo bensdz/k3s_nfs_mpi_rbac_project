@@ -1,0 +1,83 @@
+version: "3.8"
+
+networks:
+  k3s-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: ${SUBNET}
+
+services:
+  # Master node
+  master:
+    build: ./images/alpine-master
+    container_name: k3s-master
+    hostname: master
+    privileged: true
+    networks:
+      k3s-net:
+        ipv4_address: 172.25.0.10
+    environment:
+      - NODE_NAME=master
+      - CLUSTER_INIT=true
+      - K3S_TOKEN=${K3S_TOKEN}
+    ports:
+      - "6443:6443"
+      - "80:80"
+      - "443:443"
+      - "30080:30080"
+    volumes:
+      - ./manifests:/manifests
+    restart: unless-stopped
+
+  # Worker 1
+  worker-1:
+    build: ./images/alpine-worker
+    container_name: k3s-worker-1
+    hostname: worker-1
+    privileged: true
+    networks:
+      k3s-net:
+        ipv4_address: 172.25.0.20
+    environment:
+      - NODE_NAME=worker-1
+      - MASTER_IP=172.25.0.10
+      - K3S_TOKEN=${K3S_TOKEN}
+    depends_on:
+      - master
+    restart: unless-stopped
+
+  # Worker 2
+  worker-2:
+    build: ./images/alpine-worker
+    container_name: k3s-worker-2
+    hostname: worker-2
+    privileged: true
+    networks:
+      k3s-net:
+        ipv4_address: 172.25.0.21
+    environment:
+      - NODE_NAME=worker-2
+      - MASTER_IP=172.25.0.10
+      - K3S_TOKEN=${K3S_TOKEN}
+    depends_on:
+      - master
+    restart: unless-stopped
+
+  # NFS Server
+  nfs:
+    image: itsthenetwork/nfs-server-alpine:latest
+    container_name: k3s-nfs
+    hostname: nfs
+    privileged: true
+    networks:
+      k3s-net:
+        ipv4_address: 172.25.0.5
+    environment:
+      - SHARED_DIRECTORY=/data
+    volumes:
+      - nfs-data:/data
+    restart: unless-stopped
+
+volumes:
+  nfs-data:

@@ -1,0 +1,31 @@
+---
+# NFS StorageClass demonstration
+# Note: NFS PVs are configured but webapp uses emptyDir due to Docker Desktop limitations
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-pv-shared
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    server: 172.25.0.5
+    path: "/data"
+  persistentVolumeReclaimPolicy: Retain
+---
+# Test PVC to demonstrate NFS storage binding
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: test-pvc
+  namespace: default
+spec:
+  storageClassName: ""
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: nfs-pv-shared
