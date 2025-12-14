@@ -2,12 +2,11 @@
 
 ## Docker Desktop Windows Implementation
 
-> **Complete Kubernetes cluster for educational purposes**  
-> Meets all teacher requirements using Alpine Linux containers on Docker Desktop Windows
+> **Complete Kubernetes cluster in Docker with MPI, RBAC, NFS **
 
 ---
 
-## 📋 what was needed ✅
+## 📋 What was needed ✅
 
 | Requirement                                 | Status | Implementation                                  |
 | ------------------------------------------- | ------ | ----------------------------------------------- |
@@ -55,6 +54,18 @@ k3s-minimal/
 - Docker Desktop for Windows (running)
 - PowerShell 5.1 or higher
 - kubectl installed and in PATH
+
+## Setup .env file
+
+Save the following as a `.env` file:
+
+```.env
+K3S_TOKEN=my_secret_key
+CLUSTER_NAME=my_cluster
+SUBNET=172.25.0.0/16
+```
+
+**Example:**
 
 ### 1️⃣ Deploy the Cluster
 
