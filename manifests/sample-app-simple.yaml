@@ -5,7 +5,6 @@ metadata:
   name: apps
 ---
 # Simple web application using hostPath for storage
-# Note: hostPath is used instead of NFS due to Docker Desktop Windows limitations
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -39,7 +38,7 @@ spec:
             [
               "sh",
               "-c",
-              'echo "<h1>K3s Cluster - Alpine Linux</h1><p>Running on Docker Desktop Windows</p><ul><li>1 Master Node</li><li>2 Worker Nodes</li><li>RBAC Configured</li><li>Storage Demonstrated</li></ul>" > /usr/share/nginx/html/index.html',
+              'echo "<h1>K3s Cluster - Alpine Linux</h1><p>Running on Docker Desktop Windows</p><ul><li>1 Master Node</li><li>3 Worker Nodes</li><li>RBAC Configured</li><li>Storage Demonstrated</li></ul>" > /usr/share/nginx/html/index.html',
             ]
           volumeMounts:
             - name: data

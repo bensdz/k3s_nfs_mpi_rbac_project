@@ -64,6 +64,22 @@ services:
       - master
     restart: unless-stopped
 
+  worker-3:
+    build: ./images/alpine-worker
+    container_name: k3s-worker-3
+    hostname: worker-3
+    privileged: true
+    networks:
+      k3s-net:
+        ipv4_address: 172.25.0.22
+    environment:
+      - NODE_NAME=worker-3
+      - MASTER_IP=172.25.0.10
+      - K3S_TOKEN=${K3S_TOKEN}
+    depends_on:
+      - master
+    restart: unless-stopped
+
   # NFS Server
   nfs:
     image: itsthenetwork/nfs-server-alpine:latest

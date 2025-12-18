@@ -52,6 +52,3 @@ Write-Host "  [OK] Conteneurisation (Nginx webapp running)" -ForegroundColor Whi
 Write-Host "`nAccess webapp: http://localhost:30080" -ForegroundColor Yellow
 Write-Host "`nGet dev-user token:" -ForegroundColor Cyan
 Write-Host '  docker exec k3s-master kubectl create token dev-user -n dev-team' -ForegroundColor White
-
-Write-Host "`nNote: NFS storage is configured but webapp uses emptyDir" -ForegroundColor Yellow
-Write-Host "due to Docker Desktop Windows NFS limitations in containers." -ForegroundColor Yellow
