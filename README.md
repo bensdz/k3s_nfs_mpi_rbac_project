@@ -85,7 +85,7 @@ docker-compose up -d
 
 ### 2️⃣ Verify Installation
 
-```powershell
+````powershell
 # Check cluster nodes
 docker exec -it k3s-master bash
 
@@ -101,20 +101,33 @@ kubectl get nodes
 # Check all pods
 kubectl get pods -A
 
+```powershell
+# See which node runs each pod
+kubectl get pods -o wide -A
+
+# Example output:
+# NAMESPACE   NAME         READY   STATUS    RESTARTS   AGE   IP           NODE      NOMINATED NODE   READINESS GATES
+# apps        webapp-xyz   1/1     Running   0          2m    10.42.0.12   worker-1  <none>           <none>
+````
+
 # Check RBAC configuration
+
 kubectl get sa -A
 kubectl get roles,rolebindings -A
 
 # Check storage
+
 kubectl get pv,pvc
 
 # Check MPI operator
+
 kubectl get pods -n mpi-operator
 
 # Check webapp
+
 kubectl get pods,svc -n apps
 
-```
+````
 
 ### 3️⃣ Access the Web Application
 
@@ -130,7 +143,7 @@ kubectl create token dev-user -n dev-team
 
 # Create token for admin-user (full permissions)
 kubectl create token admin-user -n kube-system
-```
+````
 
 ---
 
